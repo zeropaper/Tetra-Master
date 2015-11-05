@@ -1,0 +1,10 @@
+var arrow_string = "";
+if (argument0 & ARROW_N)  arrow_string = arrow_string + " N";
+if (argument0 & ARROW_NE) arrow_string = arrow_string + " NE";
+if (argument0 & ARROW_E)  arrow_string = arrow_string + " E";
+if (argument0 & ARROW_SE) arrow_string = arrow_string + " SE";
+if (argument0 & ARROW_S)  arrow_string = arrow_string + " S";
+if (argument0 & ARROW_SW) arrow_string = arrow_string + " SW";
+if (argument0 & ARROW_W)  arrow_string = arrow_string + " W";
+if (argument0 & ARROW_NW) arrow_string = arrow_string + " NW";
+return arrow_string;
