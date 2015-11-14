@@ -40,22 +40,6 @@ var asr = irandom(afr);
 var dfr = (16 * defend_power) + irandom(15);
 var dsr = irandom(dfr);
 
-// You fucking cheater 
-/*
-if (keyboard_check(ord("W"))) {
-    dfr = 1;
-    dsr = 1;
-}
-
-if (keyboard_check(ord("L"))) {
-    afr = 1;
-    asr = 1;
-}
-*/
-
-
-// show_debug_message("Attacking roll: " + string(afr - asr) + ", Defending Roll: " + string(dfr - dsr));
-
 if ((afr - asr) > (dfr - dsr)) {
     // Attacker won
     obj_between.taken_x = defender_x;

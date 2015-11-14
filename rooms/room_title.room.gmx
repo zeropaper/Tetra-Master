@@ -10,7 +10,9 @@
   <persistent>0</persistent>
   <colour>12632256</colour>
   <showcolour>-1</showcolour>
-  <code>global.particles = part_system_create();
+  <code>randomize();
+
+global.particles = part_system_create();
 part_system_depth(global.particles, -1000000);
 
 global.p_card_boom = part_type_create();
@@ -22,7 +24,7 @@ global.p_coin_flip = part_type_create();
 global.p_coin_pick = part_type_create();
 global.p_coin_move = part_type_create();
 part_type_sprite(global.p_coin_flip, spr_coin, true, false, false);
-part_type_life(global.p_coin_flip, 55, 55);
+part_type_life(global.p_coin_flip, 60, 60);
 part_type_death(global.p_coin_flip, 1, global.p_coin_pick);
 
 part_type_life(global.p_coin_pick, 30, 30);
@@ -65,6 +67,14 @@ if (file_exists("cards.deck")) {
         file_text_writeln(file);
     }
     file_text_close(file);
+}
+
+enum connstatus {
+    none = 0,
+    host = 1,
+    client = 2,
+    waiting = 3,
+    error = 4
 }
 
 audio_play_sound(mus_quadmist, 0, true);</code>

@@ -7,7 +7,493 @@
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
-  <events/>
+  <events>
+    <event eventtype="0" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>connect_status = connstatus.none;
+server = noone;
+socket = noone;
+port = 6510;
+
+typing_ip = false;
+
+network_set_config(network_config_use_non_blocking_socket, 1);
+network_set_config(network_config_connect_timeout, 5000);
+
+chat_list = ds_list_create();
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="3">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>var buffer = buffer_create(16, buffer_grow, 1);
+buffer_seek(buffer, buffer_seek_start, 0);
+buffer_write(buffer, buffer_u8, 10)
+if (0 &gt; network_send_packet(obj_network.socket, buffer, buffer_tell(buffer))) {
+    net_panic();
+}
+buffer_delete(buffer);
+
+alarm[3] = 60;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="2">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>with (obj_game) {
+    if (info_recieved())
+        start_game_network_recv();
+    else
+        show_debug_message("nope");
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="1">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>if (instance_exists(obj_game)) exit;
+
+instance_create(0, 0, obj_game);
+instance_create(0, 0, obj_ai);
+
+obj_game.alarm[2] = 60;
+alarm[3] = 60;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>reset_network();
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="7" enumb="68">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>show_debug_message("ASYNC Network Event");
+
+var type = ds_map_find_value(async_load, "type");
+var n_id = ds_map_find_value(async_load, "id");
+var ip   = ds_map_find_value(async_load, "ip");
+var port = ds_map_find_value(async_load, "port");
+
+switch (type) {
+    case (network_type_connect):
+        // Server Event: Client Connected
+        show_debug_message("network_type_connect")
+        socket = ds_map_find_value(async_load, "socket");
+        audio_play_sound(snd_win_game, 0, false);
+        alarm[1] = 10;
+    break;
+    
+    case (network_type_disconnect):
+        net_panic();
+
+    break;
+        
+    case (network_type_data):
+        // Either: Recieve Data
+        var  buffer = ds_map_find_value(async_load, "buffer");
+        var    size = ds_map_find_value(async_load, "size");
+        switch (buffer_read(buffer, buffer_u8)) {
+            case (EVENT_SEND_TEXT):
+                var str = buffer_read(buffer, buffer_string);
+                ds_list_insert(chat_list, 0, "R: " + str)
+            break;
+            
+            case (EVENT_SEND_GRID):
+                show_debug_message("SEND_GRID")
+                for (var i = 0; i &lt; 4; i++) {
+                    for (var j = 0; j &lt; 4; j++) {
+                        obj_game.game_grid[i, j] = buffer_read(buffer, buffer_s8)
+                        
+                        show_debug_message("REC GRID: " + string(obj_game.game_grid[i, j]));
+                    }
+                }
+                obj_game.network_recieved_grid = true;
+                debug_print_grid();
+                alarm[2] = 55;
+            break;
+            
+            case (EVENT_SEND_TURN):
+                obj_game.network_first_turn = buffer_read(buffer, buffer_u8);
+                obj_game.seed = buffer_read(buffer, buffer_u64);
+                show_debug_message("SEND_TURN: " + string(obj_game.network_first_turn))
+                alarm[2] = 55;
+            break;
+            
+            case (EVENT_SEND_HAND):
+                show_debug_message("SEND_HAND")
+                for (var i = 0; i &lt; 5; i++) {
+                    for (var j = 0; j &lt; 7; j++) {
+                        if (j == 0)
+                            obj_game.red_hand[i, j] = buffer_read(buffer, buffer_string)
+                        else if (j == 6)
+                            obj_game.red_hand[i, j] = buffer_read(buffer, buffer_bool)
+                        else
+                            obj_game.red_hand[i, j] = buffer_read(buffer, buffer_u64)
+                    }
+                    show_debug_message(debug_card_string(obj_game.red_hand[i, 0], obj_game.red_hand[i, 1], obj_game.red_hand[i, 2], obj_game.red_hand[i, 3], obj_game.red_hand[i, 4],obj_game.red_hand[i, 5],obj_game.red_hand[i, 6]))
+                }
+                debug_print_hand(obj_game.red_hand);
+                obj_game.network_recieved_hand = true;
+                alarm[2] = 55;
+            break;
+            
+            case (EVENT_SEND_THOUGHT):
+                obj_ai.think_best_move = 100 * buffer_read(buffer, buffer_u8);
+            break;
+            
+            case (EVENT_SEND_MOVE):
+                var move_x = buffer_read(buffer, buffer_u8);
+                var move_y = buffer_read(buffer, buffer_u8);
+                var selected_card = buffer_read(buffer, buffer_u8);
+                place_card(move_x, move_y, selected_card + 5, true);
+                with (obj_enemy_card) {
+                    if (selected_card + 5 == hand_number) {
+                        instance_destroy();
+                    }
+                }
+                audio_stop_sound(snd_choose_card);
+                audio_play_sound(snd_choose_card, 0, false);
+                end_turn(move_x, move_y);
+            break;
+            
+            case (EVENT_SEND_CHOICE):
+                var last_play_x = buffer_read(buffer, buffer_u8);
+                var last_play_y = buffer_read(buffer, buffer_u8);
+                var place_x = buffer_read(buffer, buffer_u8);
+                var place_y = buffer_read(buffer, buffer_u8);
+                battle_cards(last_play_x, last_play_y, place_x, place_y);
+                with (obj_field_card)
+                    picked = false;
+                obj_between.multi_battle = false;
+            break;
+        }   
+    break;
+    
+    case (network_type_non_blocking_connect):
+        // Client Event: Connects to Server?
+        show_debug_message("network_type_non_blocking_connect")
+        if (socket == noone) {
+            var    sock = ds_map_find_value(async_load, "socket");
+            var success = ds_map_find_value(async_load, "succeeded");
+            if (success) {
+                socket = sock;
+                if (connect_status == connstatus.waiting)
+                    connect_status = connstatus.client;
+                audio_play_sound(snd_win_game, 0, false);
+                alarm[1] = 10;
+            } else { 
+                network_error();
+            }
+        }
+    break;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="73">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>draw_set_halign(fa_center);
+draw_set_valign(fa_top);
+draw_set_font(font_bottom);
+draw_set_color(c_white);
+
+var draw_str;
+var chatting = false; // This is a temp solution to test chatting
+if (typing_ip) {
+    draw_str = "Input IP: " + keyboard_string;
+
+} else {
+    switch (connect_status) {
+        case (connstatus.none):
+            draw_str = "Press H to Host, or C to Connect.";
+            break;
+        
+        case (connstatus.waiting):
+            draw_str = "Waiting..."
+            break;
+        
+        case (connstatus.host):
+            if (socket &gt;= 0) {
+                draw_str = "Hosting: Found game!"
+                chatting = true;
+            }
+            else
+                draw_str = "Hosting: Waiting for game..."
+            break;
+            
+        case (connstatus.client):
+            draw_str = "Client: Connected!"
+            chatting = true;
+            break;    
+            
+        case (connstatus.error):
+            draw_str = "Error connecting or hosting."
+            break; 
+    }
+}
+
+if (!chatting) {
+    draw_text(room_width / 2, 220, draw_str);
+} else {
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_bottom);
+    draw_text_ext(3, 227, str_chat_get(4, chat_list), 8, 160); 
+    while (string_length(keyboard_string) &gt; 50) {
+        keyboard_string = string_delete(keyboard_string, 51, 1);
+    }
+    draw_text_ext(3, 235, "Chat: " + keyboard_string, 8, 320)
+}
+draw_set_color(c_black);
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="72">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>if (connect_status != connstatus.none || typing_ip) 
+    exit;
+
+server = network_create_server(network_socket_tcp, port, 1);
+if (server &gt;= 0) {
+    connect_status = connstatus.host;
+    audio_play_sound(snd_win_game, 0, false); 
+} else {
+    network_error();
+}
+
+keyboard_string = ""
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="67">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>if (connect_status != connstatus.none || typing_ip) 
+    exit;
+
+keyboard_string = "";
+typing_ip = true;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="27">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>if (typing_ip || (connect_status != connstatus.none &amp;&amp; !instance_exists(obj_game))) {
+    reset_network();
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="13">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>if (socket &gt;= 0 &amp;&amp; (connect_status == connstatus.host || connect_status == connstatus.client)) {
+    var buffer = buffer_create(256, buffer_grow, 1);
+    buffer_seek(buffer, buffer_seek_start, 0);
+    buffer_write(buffer, buffer_u8, EVENT_SEND_TEXT)
+    buffer_write(buffer, buffer_string, keyboard_string)
+    ds_list_insert(chat_list, 0, "B: " + keyboard_string);
+    if (0 &gt; network_send_packet(socket, buffer, buffer_tell(buffer))) {
+        net_panic();
+    }
+    buffer_delete(buffer);
+    keyboard_string = ""
+} else if (typing_ip) {
+    network_connect(network_create_socket(network_socket_tcp), keyboard_string, port)
+    connect_status = connstatus.waiting;
+    typing_ip = false;
+    keyboard_string = ""
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+  </events>
   <PhysicsObject>0</PhysicsObject>
   <PhysicsObjectSensor>0</PhysicsObjectSensor>
   <PhysicsObjectShape>0</PhysicsObjectShape>

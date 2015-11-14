@@ -27,6 +27,9 @@
             <kind>1</kind>
             <string>selected_card = 0;
 move_interval = 5;  // Higher is slower
+if (instance_exists(obj_network))
+    move_interval = 1;
+
 think_interval = 2; // Higher is slower
 
 think_moves_culled = false;
@@ -109,6 +112,7 @@ if (selected_card &lt; supposed_card) {
     audio_stop_sound(snd_choose_card);
     audio_play_sound(snd_choose_card, 0, false);
     alarm[1] = move_interval;
+    
 } else if (selected_card &gt; supposed_card) {
     selected_card--;
     while (obj_game.red_hand[selected_card, 6]) {
@@ -117,10 +121,12 @@ if (selected_card &lt; supposed_card) {
     audio_stop_sound(snd_choose_card);
     audio_play_sound(snd_choose_card, 0, false);
     alarm[1] = move_interval;
-} else if ( (think_iterations == think_iteration_max) || 
+    
+} else if ( !instance_exists(obj_network) &amp;&amp;
+            ((think_iterations == think_iteration_max) || 
             (think_move_score &gt;= think_score_threshold) ||
-             ds_list_empty(think_unanalyzed_moves) ) {
-    // show_debug_message("Selected Card: " + string(selected_card));
+             ds_list_empty(think_unanalyzed_moves)) ) {
+             
     place_card(move_x, move_y, selected_card + 5, true);
     with (obj_enemy_card) {
         if (supposed_card + 5 == hand_number) {
@@ -277,14 +283,19 @@ alarm[0] = think_interval;
             <kind>1</kind>
             <string>if (!GAME_STARTED) exit;
 
-if (TURN_IS_RED &amp;&amp; alarm[0] == -1) {
-    alarm[0] = think_interval;
-}
-
 if (!TURN_IS_RED) {
     alarm[0] = -1;
     alarm[1] = -1;
 }
+
+if (TURN_IS_RED) {
+    if (!instance_exists(obj_network) &amp;&amp; alarm[0] == -1)
+        alarm[0] = think_interval;
+    else if (instance_exists(obj_network) &amp;&amp; alarm[1] == -1)
+        alarm[1] = move_interval;
+}
+
+
 </string>
           </argument>
         </arguments>

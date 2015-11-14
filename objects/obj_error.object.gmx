@@ -25,39 +25,8 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>last_turn = NO_TURN;
-last_play_x = 0;
-last_play_y = 0;
-card_battling = false;
-card_battles = 0;
-multi_battle = false;
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="2" enumb="1">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>card_battling = false;
-multi_battle = false;
-with (obj_field_card) {
-    card_battling_stopped = false;
-}
+            <string>audio_stop_sound(mus_quadmist);
+audio_play_sound(snd_lose_game, 0, false);
 </string>
           </argument>
         </arguments>
@@ -80,22 +49,13 @@ with (obj_field_card) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>alarm[1] = 40;
-take_card(taken_x, taken_y, true, battle_winner);
-with (obj_field_card) {
-    card_battling = false;
-    card_battling_x = 0;
-    card_battling_y = 0;
-    card_battling_f = 0;
-    card_battling_s = 0;
-}
-
+            <string>game_restart();
 </string>
           </argument>
         </arguments>
       </action>
     </event>
-    <event eventtype="3" enumb="0">
+    <event eventtype="8" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -112,50 +72,40 @@ with (obj_field_card) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var card_info = get_card_info(obj_game.game_grid[last_play_x, last_play_y]);
-var card_owner = owned_by_red(obj_game.game_grid[last_play_x, last_play_y]);
+            <string>if (alarm[0] &gt; -1) exit;
 
-if (!card_battling) {
-    card_battles = get_card_battles(last_play_x, last_play_y);  
-    var num_battles = card_battles[0, 0];
-    if (num_battles &gt; 1 &amp;&amp; card_owner == last_turn) {
-        card_battling = true;
-        if (last_turn == RED_TURN &amp;&amp; !instance_exists(obj_network)) {
-            battle_cards(last_play_x, last_play_y, last_play_x + card_battles[1, 0], last_play_y + card_battles[1, 1]);
-        } else if (last_turn == BLUE_TURN || instance_exists(obj_network)) {
-            multi_battle = true;
-            for (var i = 1; i &lt;= num_battles; i++) {
-                var inst_id = collision_point(gulx(card_battles[i, 0] + last_play_x) + 2, guly(card_battles[i, 1] + last_play_y) + 2, obj_field_card, false, true);
-                inst_id.picked = 1;
-            }
-            
-        }
-        
-    } else if (num_battles == 1 &amp;&amp; card_owner == last_turn) {
-        card_battling = true;
-        battle_cards(last_play_x, last_play_y, last_play_x + card_battles[1, 0], last_play_y + card_battles[1, 1]);
-    } else {
-    
-        if (card_owner == last_turn) {
-            for (var i = -1; i &lt;= 1; i++) {
-                for (var j = -1; j &lt;= 1; j++) {
-                    if (i != 0 || j != 0) {
-                        if (card_info[5] &amp; get_arrow(i, j)) take_card(last_play_x + i, last_play_y + j, false, last_turn);
-                    }
-                }
-            }
-        }
-        
-        update_scores();
-        if (CARDS_PLACED != 10) {
-            TURN = abs(last_turn - 1);
-        } else {
-            instance_create(-5, -5, obj_ending);
-        }
-        instance_destroy();
-        
-    }
-}
+draw_set_halign(fa_center);
+draw_set_valign(fa_center);
+draw_set_font(font_bottom);
+draw_set_color(c_white);
+
+draw_text_ext(160, 120, "An error has occured. Either you or your opponent have disconnected. Press ESC to return to the title screen.", 8, (.75 * 320));
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="27">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>if (alarm[0] &gt; -1) exit;
+
+audio_play_sound(snd_lose_card, 0, false);
+alarm[0] = 60;
 </string>
           </argument>
         </arguments>

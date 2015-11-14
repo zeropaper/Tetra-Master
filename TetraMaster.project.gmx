@@ -105,6 +105,9 @@
       <script>scripts\create_block.gml</script>
       <script>scripts\coin_pick.gml</script>
       <script>scripts\start_game.gml</script>
+      <script>scripts\info_recieved.gml</script>
+      <script>scripts\start_game_network_recv.gml</script>
+      <script>scripts\start_game_network_send.gml</script>
     </scripts>
     <scripts name="ai_think">
       <script>scripts\analyze_enemy_attack.gml</script>
@@ -136,6 +139,12 @@
       <script>scripts\draw_number.gml</script>
       <script>scripts\draw_board.gml</script>
     </scripts>
+    <scripts name="networking">
+      <script>scripts\network_error.gml</script>
+      <script>scripts\reset_network.gml</script>
+      <script>scripts\str_chat_get.gml</script>
+      <script>scripts\net_panic.gml</script>
+    </scripts>
   </scripts>
   <fonts name="fonts">
     <font>fonts\font_text</font>
@@ -151,6 +160,7 @@
     <object>objects\obj_between</object>
     <object>objects\obj_ending</object>
     <object>objects\obj_title</object>
+    <object>objects\obj_error</object>
     <object>objects\obj_network</object>
     <objects name="transitions">
       <object>objects\obj_fadein</object>
@@ -165,8 +175,9 @@
     <room>rooms\room_title</room>
     <room>rooms\room_tetramaster</room>
     <room>rooms\room_multiplayer</room>
+    <room>rooms\room_error</room>
   </rooms>
-  <constants number="35">
+  <constants number="42">
     <constant name="RED_PERFECT">4</constant>
     <constant name="RED_WIN">3</constant>
     <constant name="TIE">2</constant>
@@ -202,6 +213,13 @@
     <constant name="BLUE_SCORE">obj_game.game_score[0]</constant>
     <constant name="RED_SCORE">obj_game.game_score[1]</constant>
     <constant name="NO_CARD">-1</constant>
+    <constant name="EVENT_SEND_TEXT">0</constant>
+    <constant name="EVENT_SEND_GRID">1</constant>
+    <constant name="EVENT_SEND_TURN">2</constant>
+    <constant name="EVENT_SEND_HAND">3</constant>
+    <constant name="EVENT_SEND_THOUGHT">5</constant>
+    <constant name="EVENT_SEND_MOVE">6</constant>
+    <constant name="EVENT_SEND_CHOICE">7</constant>
   </constants>
   <help>
     <rtf>help.rtf</rtf>

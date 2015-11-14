@@ -43,6 +43,51 @@ card_selected = noone;
 blue_cards = 0;
 red_cards = 0;
 cards_taken = 0;
+
+if (instance_exists(obj_network)) {
+    alarm[7] = 120;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="7">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>with (obj_field_card) {
+    var card_identity = obj_game.game_grid[place_x, place_y];
+    if (card_identity &gt;= 16)
+        card_identity -= 16;
+    if (card_identity &gt;= 5)
+        continue;
+    
+    var card = get_card_info(card_identity);
+    var card_index = get_card_index_from_name(card[0]);
+    ds_list_add(global.card_deck[card_index], card);
+    show_debug_message("Added: " + card[0]);
+}
+
+with (obj_field_card) instance_destroy();
+with (obj_stone) instance_destroy();
+with (obj_game) instance_destroy();
+with (obj_ai) instance_destroy();
+with (obj_network) alarm[1] = 10;
+instance_destroy();
 </string>
           </argument>
         </arguments>
@@ -322,7 +367,7 @@ show_debug_message("Alarm!");
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (alarm[5]) {
+            <string>if (alarm[5] || instance_exists(obj_network)) {
     exit;
 }
 

@@ -69,11 +69,41 @@ drawn_score[0] = 0;
 drawn_score[1] = 0;
 ending = false;
 
+network_recieved_hand = false;
+network_recieved_grid = false;
+network_first_turn = NO_TURN;
+
 initialize_hand(blue_hand);
 initialize_hand(red_hand);
+initialize_grid(game_grid);
 
 // Play Quadmist.
-start_game();
+if (!instance_exists(obj_network)) {
+    start_game();
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="2">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>start_game_network_send();
 </string>
           </argument>
         </arguments>
@@ -101,6 +131,8 @@ if (drawn_score[0] &gt; BLUE_SCORE) drawn_score[0]--;
 if (drawn_score[1] &lt; RED_SCORE) drawn_score[1]++;
 if (drawn_score[1] &gt; RED_SCORE) drawn_score[1]--;
 alarm[1] = 10;
+
+
 </string>
           </argument>
         </arguments>
@@ -135,6 +167,19 @@ if (TURN_IS_BLUE &amp;&amp; CARD_IS_SELECTED) {
     // Place the card.
     else if (mouse_check_button_pressed(mb_left) &amp;&amp; point_in_playing_field(mouse_x, mouse_y)) {
         if (place_card(mgx(grid_cursor_x), mgy(grid_cursor_y), SELECTED_CARD, false) != -1){      
+            if (instance_exists(obj_network)) {
+                var buffer = buffer_create(16, buffer_grow, 1);
+                buffer_seek(buffer, buffer_seek_start, 0);
+                buffer_write(buffer, buffer_u8, EVENT_SEND_MOVE)
+                buffer_write(buffer, buffer_u8, mgx(grid_cursor_x));
+                buffer_write(buffer, buffer_u8, mgy(grid_cursor_y));
+                buffer_write(buffer, buffer_u8, SELECTED_CARD);
+                if (0 &gt; network_send_packet(obj_network.socket, buffer, buffer_tell(buffer))) {
+                    net_panic();
+                }
+                buffer_delete(buffer);
+            }
+            
             with (obj_player_card) {
                 if (SELECTED_CARD == handNumber) {
                     instance_destroy();

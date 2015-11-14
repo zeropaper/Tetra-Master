@@ -274,7 +274,20 @@ origin_y = 0;
             <string>if (ending) {
     exit;
 } else if (instance_exists(obj_between)) {
-    if (picked) {
+    if (picked &amp;&amp; obj_between.last_turn == BLUE_TURN) {
+        if (instance_exists(obj_network)) {
+            var buffer = buffer_create(16, buffer_grow, 1);
+            buffer_seek(buffer, buffer_seek_start, 0);
+            buffer_write(buffer, buffer_u8, EVENT_SEND_CHOICE)
+            buffer_write(buffer, buffer_u8, obj_between.last_play_x);
+            buffer_write(buffer, buffer_u8, obj_between.last_play_y);
+            buffer_write(buffer, buffer_u8, place_x);
+            buffer_write(buffer, buffer_u8, place_y);
+            if (0 &gt; network_send_packet(obj_network.socket, buffer, buffer_tell(buffer))) {
+                net_panic();
+            }
+            buffer_delete(buffer);
+        }
         battle_cards(obj_between.last_play_x, obj_between.last_play_y, place_x, place_y);
         with (obj_field_card) {
             picked = false;

@@ -127,6 +127,16 @@ if (GAME_STARTED &amp;&amp; TURN_IS_BLUE &amp;&amp; point_in_rectangle(mouse_x, 
         hoverOver = true;
         audio_stop_sound(snd_cursor);
         audio_play_sound(snd_cursor, 1, false);
+        if (instance_exists(obj_network)) {
+            var buffer = buffer_create(16, buffer_grow, 1);
+            buffer_seek(buffer, buffer_seek_start, 0);
+            buffer_write(buffer, buffer_u8, EVENT_SEND_THOUGHT)
+            buffer_write(buffer, buffer_u8, handNumber);
+            if (0 &gt; network_send_packet(obj_network.socket, buffer, buffer_tell(buffer))) {
+                net_panic();
+            }
+            buffer_delete(buffer);
+        }
     }
  
 } else {
