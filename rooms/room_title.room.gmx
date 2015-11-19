@@ -11,6 +11,11 @@
   <colour>12632256</colour>
   <showcolour>-1</showcolour>
   <code>randomize();
+var f = irandom(16);
+var s = irandom(f);
+var fd = irandom(16);
+var sd = irandom(fd);
+show_debug_message(string(f - s) + " " + string(fd - sd))
 
 global.particles = part_system_create();
 part_system_depth(global.particles, -1000000);

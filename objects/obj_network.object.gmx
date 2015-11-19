@@ -93,7 +93,7 @@ alarm[3] = 60;
     if (info_recieved())
         start_game_network_recv();
     else
-        show_debug_message("nope");
+        alarm[2] = 60;
 }
 </string>
           </argument>
@@ -169,9 +169,7 @@ alarm[3] = 60;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>show_debug_message("ASYNC Network Event");
-
-var type = ds_map_find_value(async_load, "type");
+            <string>var type = ds_map_find_value(async_load, "type");
 var n_id = ds_map_find_value(async_load, "id");
 var ip   = ds_map_find_value(async_load, "ip");
 var port = ds_map_find_value(async_load, "port");

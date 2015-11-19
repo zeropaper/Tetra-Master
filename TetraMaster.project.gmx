@@ -177,7 +177,7 @@
     <room>rooms\room_multiplayer</room>
     <room>rooms\room_error</room>
   </rooms>
-  <constants number="42">
+  <constants number="43">
     <constant name="RED_PERFECT">4</constant>
     <constant name="RED_WIN">3</constant>
     <constant name="TIE">2</constant>
@@ -220,6 +220,7 @@
     <constant name="EVENT_SEND_THOUGHT">5</constant>
     <constant name="EVENT_SEND_MOVE">6</constant>
     <constant name="EVENT_SEND_CHOICE">7</constant>
+    <constant name="INT_MAX_32S">2147483647</constant>
   </constants>
   <help>
     <rtf>help.rtf</rtf>

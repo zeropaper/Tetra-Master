@@ -48,8 +48,7 @@ if (obj_network.connect_status == connstatus.host) {
     }
     
     // Send the first turn and the seed.
-    randomize();
-    obj_game.seed = random_get_seed();
+    obj_game.seed = irandom(INT_MAX_32S);
     
     var buffer = buffer_create(16, buffer_grow, 1);
     buffer_seek(buffer, buffer_seek_start, 0);
