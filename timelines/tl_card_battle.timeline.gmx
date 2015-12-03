@@ -19,8 +19,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>audio_stop_sound(snd_card_battle);
-audio_play_sound(snd_card_battle, 0, false);
+            <string>play_sfx(snd_card_battle);
 part_particles_create(global.particles, x + card_battling_x * sprite_width/2, y + card_battling_y * sprite_height/2, global.p_card_boom, 1);
 </string>
           </argument>

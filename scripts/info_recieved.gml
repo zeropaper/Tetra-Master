@@ -1,3 +1,5 @@
+// Returns true if we have all the information necessary to start the game.
+
 if (!obj_game.network_recieved_hand)
     show_debug_message("haven't recieved hand")
 

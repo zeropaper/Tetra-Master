@@ -24,8 +24,7 @@ if (take_combo) {
     inst_id.flipping = true;
     inst_id.flip_cb = true;
     inst_id.alarm[0] = 30;
-    audio_stop_sound(snd_flip_card);
-    audio_play_sound(snd_flip_card, 0, false);
+    play_sfx(snd_flip_card);
     var orig_id = inst_id;
     var req_arrow = 0;
     
@@ -84,6 +83,5 @@ if (take_combo) {
     var inst_id = collision_point(gulx(taken_x) + 2, guly(taken_y) + 2, obj_field_card, false, true);
     inst_id.flipping = true;
     inst_id.alarm[0] = 60;
-    audio_stop_sound(snd_flip_card);
-    audio_play_sound(snd_flip_card, 0, false);
+    play_sfx(snd_flip_card);
 }

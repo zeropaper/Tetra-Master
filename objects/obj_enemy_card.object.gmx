@@ -25,11 +25,15 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>audio_play_sound(snd_choose_card, 0, false);
+            <string>// Create the 'sliding in' effect on creation.
+var num_enemy_cards = instance_number(object_index);
+
 frames = 0;
-newY = 16 + 14 * instance_number(obj_enemy_card);
-depth -= instance_number(object_index);
-hand_number = instance_number(object_index) + 4;
+newY = 16 + 14 * num_enemy_cards;
+hand_number = num_enemy_cards + 4;
+depth = -num_enemy_cards;
+
+audio_play_sound(snd_choose_card, 0, false);
 </string>
           </argument>
         </arguments>
@@ -52,7 +56,9 @@ hand_number = instance_number(object_index) + 4;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var mhn = hand_number;
+            <string>// 'Scoots up' all other cards on destroy.
+
+var mhn = hand_number;
 with (obj_enemy_card) {
     if (hand_number &gt; mhn) {
         y -= 14;
@@ -110,15 +116,17 @@ frames++;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (instance_exists(obj_ai) &amp;&amp; TURN_IS_RED &amp;&amp; GAME_STARTED) {
-    if ((obj_ai.selected_card + 5) = hand_number) {
-        draw_sprite(sprite_index, image_index, x + 10, y);
-    } else {
-        draw_self();
+            <string>var draw_x = x;
+var draw_y = y;
+
+if (instance_exists(obj_ai) &amp;&amp; TURN_IS_RED &amp;&amp; GAME_STARTED) {
+    // If the AI is thinking about this card, pull it out.
+    if (obj_ai.selected_card == hand_number - 5) {
+        draw_x += 10;
     }
-} else {
-    draw_self();
 }
+
+draw_sprite(sprite_index, image_index, draw_x, draw_y);
 </string>
           </argument>
         </arguments>

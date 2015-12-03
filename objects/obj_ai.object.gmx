@@ -25,22 +25,25 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>selected_card = 0;
+            <string>selected_card = 0;  // What card is the AI thinking about?
 move_interval = 5;  // Higher is slower
 if (instance_exists(obj_network))
     move_interval = 1;
 
 think_interval = 2; // Higher is slower
 
-think_moves_culled = false;
+think_moves_culled = false; // Have we culled worthless moves yet?
 
+// How many times will the AI "think" before making a move?
 think_iterations = 0;
 think_iteration_max = 20;
 
+// How good must a move be before the AI picks it immediately?
 think_best_move = 0;
 think_move_score = 0;
-think_score_threshold = 60;
+think_score_threshold = 70;
 
+// Create movelists.
 think_possible_moves = ds_list_create();
 think_unanalyzed_moves = ds_list_create();
 for (var i = 0; i &lt; 5; i++) {
@@ -73,7 +76,8 @@ think_first_move = false;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>ds_list_destroy(think_possible_moves);
+            <string>// Free memory of movelists.
+ds_list_destroy(think_possible_moves);
 ds_list_destroy(think_unanalyzed_moves);
 </string>
           </argument>
@@ -109,8 +113,7 @@ if (selected_card &lt; supposed_card) {
     while (obj_game.red_hand[selected_card, 6]) {
         selected_card++;
     }
-    audio_stop_sound(snd_choose_card);
-    audio_play_sound(snd_choose_card, 0, false);
+    play_sfx(snd_choose_card);
     alarm[1] = move_interval;
     
 } else if (selected_card &gt; supposed_card) {
@@ -118,8 +121,7 @@ if (selected_card &lt; supposed_card) {
     while (obj_game.red_hand[selected_card, 6]) {
         selected_card--;
     }
-    audio_stop_sound(snd_choose_card);
-    audio_play_sound(snd_choose_card, 0, false);
+    play_sfx(snd_choose_card);
     alarm[1] = move_interval;
     
 } else if ( !instance_exists(obj_network) &amp;&amp;
@@ -133,8 +135,7 @@ if (selected_card &lt; supposed_card) {
             instance_destroy();
         }
     }
-    audio_stop_sound(snd_choose_card);
-    audio_play_sound(snd_choose_card, 0, false);
+    play_sfx(snd_choose_card);
     
     think_moves_culled = false;
     think_iterations = 0;
@@ -249,8 +250,6 @@ if (think_first_move) {
     }
 
 }
-
-// show_debug_message("Analyzing move: " + string(analyze_move) + ", Potential: " + string(move_potential));
 
 if (move_potential &gt;= think_move_score) {
     think_best_move = analyze_move;

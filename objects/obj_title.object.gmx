@@ -64,8 +64,7 @@ highlight[0] = point_in_rectangle(mouse_x, mouse_y, room_width / 2 - sprite_get_
 highlight[1] = point_in_rectangle(mouse_x, mouse_y, room_width / 2 - sprite_get_width(spr_title_mp) / 2, 155, room_width / 2 + sprite_get_width(spr_title_mp) / 2, 155 + sprite_get_height(spr_title_mp));
 
 if ((prev_light[1] != highlight[1] &amp;&amp; highlight[1]) || (prev_light[0] != highlight[0] &amp;&amp; highlight[0])) {
-    audio_stop_sound(snd_cursor);
-    audio_play_sound(snd_cursor, 0, false);
+    play_sfx(snd_cursor);
 }
 </string>
           </argument>

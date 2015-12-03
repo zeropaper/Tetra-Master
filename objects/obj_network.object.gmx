@@ -251,8 +251,7 @@ switch (type) {
                         instance_destroy();
                     }
                 }
-                audio_stop_sound(snd_choose_card);
-                audio_play_sound(snd_choose_card, 0, false);
+                play_sfx(snd_choose_card);
                 end_turn(move_x, move_y);
             break;
             

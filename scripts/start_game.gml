@@ -15,9 +15,7 @@ if (global.quickplay) {
 // Generate the enemy's hand.
 generate_enemy_hand(red_hand);
 
-debug_print_hand(blue_hand);
-debug_print_hand(red_hand);
-
+// Initialize game variables.
 BLUE_SCORE = 0;
 RED_SCORE = 0;
 TURN = NO_TURN;
@@ -25,6 +23,7 @@ GAME_STARTED = false;
 SELECTED_CARD = NO_CARD;
 CARDS_PLACED = 0;
 
+// Start the timeline.
 timeline_index = tl_game_setup;
 timeline_position = 0;
 timeline_running = true;

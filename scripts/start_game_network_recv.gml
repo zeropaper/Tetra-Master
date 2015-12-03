@@ -1,3 +1,5 @@
+// Finishes the game setup once everything is recieved.
+
 timeline_index = tl_game_setup;
 timeline_position = 0;
 timeline_running = true;

@@ -54,25 +54,27 @@ The real numbers are as follows:
 */
 
 // Set Up Variables
-blue_hand[0, 0] = 0;
-red_hand[0, 0]  = 0;
-game_grid[0, 0] = 0;
-game_score[0] = 0;
-game_score[1] = 0;
-game_start = false;
-current_player_turn = NO_TURN;
-selected_card = -1;
-grid_cursor_x = 0;
-grid_cursor_y = 0;
-cards_placed = 0;
-drawn_score[0] = 0;
-drawn_score[1] = 0;
+blue_hand[0, 0] = 0;    // Blue hand, stored as mentioned above
+red_hand[0, 0]  = 0;    // Red hand, stored as above
+game_grid[0, 0] = 0;    // The game grid, stored as above
+game_score[0] = 0;      // Blue's Score
+game_score[1] = 0;      // Red's Score
+game_start = false;     // True iff the game has started
+current_player_turn = NO_TURN;  // The current player's turn
+selected_card = -1;     // Which card the player has selected
+grid_cursor_x = 0;      // Which grid x value the player's cursor corresponds to
+grid_cursor_y = 0;      // Which grid y value the player's cursor corresponds to
+cards_placed = 0;       // How many cards are placed in total; 10 at game end
+drawn_score[0] = 0;     // Blue's score as shown to player. Animated.
+drawn_score[1] = 0;     // Red's score as shown to player. Animated.
 ending = false;
 
-network_recieved_hand = false;
-network_recieved_grid = false;
-network_first_turn = NO_TURN;
+// Network variables
+network_recieved_hand = false;  // True if we have the other player's hand
+network_recieved_grid = false;  // True if we have the grid
+network_first_turn = NO_TURN;   // True if we have the decided upon first turn.
 
+// Initialize hands and the grid.
 initialize_hand(blue_hand);
 initialize_hand(red_hand);
 initialize_grid(game_grid);
@@ -126,7 +128,10 @@ if (!instance_exists(obj_network)) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (drawn_score[0] &lt; BLUE_SCORE) drawn_score[0]++;
+            <string>// Updates the drawn score to match the actual score
+// every 1/6th of a second.
+
+if (drawn_score[0] &lt; BLUE_SCORE) drawn_score[0]++;
 if (drawn_score[0] &gt; BLUE_SCORE) drawn_score[0]--;
 if (drawn_score[1] &lt; RED_SCORE) drawn_score[1]++;
 if (drawn_score[1] &gt; RED_SCORE) drawn_score[1]--;
@@ -155,18 +160,19 @@ alarm[1] = 10;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// If it's BLUE's turn and there's a selected card:
+            <string>// Handles game logic.
 
 if (TURN_IS_BLUE &amp;&amp; CARD_IS_SELECTED) {
     // Escape out of a card selection.
     if (keyboard_check_pressed(vk_escape)) {
         SELECTED_CARD = NO_CARD;
-        audio_stop_sound(snd_escape);
-        audio_play_sound(snd_escape, 0, false);
+        play_sfx(snd_escape);
     } 
     // Place the card.
     else if (mouse_check_button_pressed(mb_left) &amp;&amp; point_in_playing_field(mouse_x, mouse_y)) {
         if (place_card(mgx(grid_cursor_x), mgy(grid_cursor_y), SELECTED_CARD, false) != -1){      
+            
+            // Send the card placement, if in a network game.
             if (instance_exists(obj_network)) {
                 var buffer = buffer_create(16, buffer_grow, 1);
                 buffer_seek(buffer, buffer_seek_start, 0);
@@ -180,18 +186,20 @@ if (TURN_IS_BLUE &amp;&amp; CARD_IS_SELECTED) {
                 buffer_delete(buffer);
             }
             
+            // Destroy the obj_player_card, we don't need it anymore
             with (obj_player_card) {
                 if (SELECTED_CARD == handNumber) {
                     instance_destroy();
                 }
-            }            
+            }
+            
+            // End the turn    
             SELECTED_CARD = NO_CARD;
-            audio_stop_sound(snd_choose_card);
-            audio_play_sound(snd_choose_card, 0, false);
+            play_sfx(snd_choose_card);
             end_turn(mgx(grid_cursor_x), mgy(grid_cursor_y));
         } else {
-            audio_stop_sound(snd_error);
-            audio_play_sound(snd_error, 0, false);
+            // We made an illegal move, error!
+            play_sfx(snd_error);
         }
     }
 }
@@ -232,8 +240,7 @@ if (TURN_IS_BLUE &amp;&amp; CARD_IS_SELECTED &amp;&amp; point_in_playing_field(m
 
     // Play a sound if it's changed.
     if (pre_x != grid_cursor_x || pre_y != grid_cursor_y) {
-        audio_stop_sound(snd_cursor);
-        audio_play_sound(snd_cursor, 0, false);
+        play_sfx(snd_cursor);
     }
 
 } else {

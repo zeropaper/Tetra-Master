@@ -1,4 +1,5 @@
 // This script populates the hand array with a hand of blank cards.
+// @argument0: the hand array to populate.
 
 array = argument0;
 for (var i = 4; i >= 0; i--) {

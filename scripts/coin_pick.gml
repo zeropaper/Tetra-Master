@@ -1,3 +1,6 @@
+// Sets and creates a particle effect for the coin based on
+// which player is moving first.
+
 switch (current_player_turn) {
     case (BLUE_TURN):
         part_type_sprite(global.p_coin_pick, spr_blue_pick, false, false, false);

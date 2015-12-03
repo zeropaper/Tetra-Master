@@ -1,3 +1,5 @@
+// Creates an obj_player_card from the card values.
+
 var inst_id = instance_create(270, 8 + 52 * instance_number(obj_player_card), obj_player_card);
 inst_id.name = argument0;
 inst_id.attack_type = argument1;

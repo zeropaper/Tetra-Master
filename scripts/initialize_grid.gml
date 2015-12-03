@@ -1,4 +1,5 @@
 // This script empties the game's grid.
+// @argument0: the game grid.
 
 // Sets the array to be completely empty.
 array = argument0;

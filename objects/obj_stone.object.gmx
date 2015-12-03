@@ -25,10 +25,12 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>image_index = irandom(1);
+            <string>// Randomize stone pattern.
+image_index = irandom(1);
 image_speed = 0;
-alarm[0] = 10;
 
+// Set zoom-in.
+alarm[0] = 10;
 depth -= instance_number(object_index);
 </string>
           </argument>

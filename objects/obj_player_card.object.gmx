@@ -48,7 +48,10 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var myNum = cardNumber;
+            <string>// Move over the card numbers so that things
+// are drawn in the proper place.
+
+var myNum = cardNumber;
 with (obj_player_card) {
     if (cardNumber &gt; myNum) {
         cardNumber--;
@@ -99,7 +102,9 @@ with (obj_player_card) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var draw_small = (!GAME_STARTED || instance_number(object_index) == 5);
+            <string>// We have to draw the cards as small if there are 5 of them
+// so that they all fit on one column.
+var draw_small = (!GAME_STARTED || instance_number(object_index) == 5);
 if (draw_small) {
     var draw_x = 270;
     var draw_y = 8 + 42 * cardNumber;
@@ -109,24 +114,24 @@ if (draw_small) {
     var draw_y = 8 + 52 * min(cardNumber, 3);
     var drawScale = 1;
 }
-
 draw_card(draw_x, draw_y, name, attack_type, attack_power, physical_defense, magical_defense, arrows, draw_small, false);
+var moused_over = point_in_rectangle(mouse_x, mouse_y, draw_x, draw_y, draw_x + 42 * drawScale, draw_y + 51 * drawScale);
 
-if (GAME_STARTED &amp;&amp; TURN_IS_BLUE &amp;&amp; point_in_rectangle(mouse_x, mouse_y, draw_x, draw_y, draw_x + 42 * drawScale, draw_y + 51 * drawScale)) {
-    if (mouse_check_button_pressed(mb_left) &amp;&amp; SELECTED_CARD != handNumber) {
+if (GAME_STARTED &amp;&amp; TURN_IS_BLUE &amp;&amp; moused_over) {
     
+    // Select the card if a mouse button is pressed.
+    if (mouse_check_button_pressed(mb_left) &amp;&amp; SELECTED_CARD != handNumber) {
         SELECTED_CARD = handNumber;
-        //show_debug_message("Selected Card: " + string(obj_game.selected_card));
-        audio_stop_sound(snd_cursor);
-        audio_play_sound(snd_cursor, 0, false);
-        mouse_clear(mb_any); 
-        
+        play_sfx(snd_cursor);
+        mouse_clear(mb_any);  
     }
     
+    // Play the cursor sound effect if starting to hover over this card.
     if (!hoverOver &amp;&amp; SELECTED_CARD != handNumber) {
         hoverOver = true;
-        audio_stop_sound(snd_cursor);
-        audio_play_sound(snd_cursor, 1, false);
+        play_sfx(snd_cursor);
+        
+        // Send the thought if in a network game.
         if (instance_exists(obj_network)) {
             var buffer = buffer_create(16, buffer_grow, 1);
             buffer_seek(buffer, buffer_seek_start, 0);
@@ -138,8 +143,8 @@ if (GAME_STARTED &amp;&amp; TURN_IS_BLUE &amp;&amp; point_in_rectangle(mouse_x, 
             buffer_delete(buffer);
         }
     }
- 
 } else {
+    // Not hovered over.
     hoverOver = false;
 }
 
@@ -148,14 +153,18 @@ if (!TURN_IS_BLUE) {
 }
 
 if (CARD_IS_SELECTED &amp;&amp; SELECTED_CARD != handNumber) {
+    // A card is selected, but not this one.
     draw_set_alpha(.5);
     draw_rectangle(draw_x, draw_y, draw_x + 42 * drawScale, draw_y + 51 * drawScale, false);
     draw_set_alpha(1);
 } else if (CARD_IS_SELECTED &amp;&amp; SELECTED_CARD == handNumber) {
+    // This card is selected.
     draw_sprite_ext(spr_cursor, cursor_position, draw_x - 13, draw_y + (12 * drawScale), 1, 1, 0, c_black, .5);
     draw_sprite_ext(spr_cursor, cursor_position, draw_x - 18, draw_y + (7 * drawScale), 1, 1, 0, c_white, .5);
 }
+
 if (hoverOver &amp;&amp; SELECTED_CARD != handNumber) {
+    // This card is hovered over, but not selected.
     cursor_position = image_index/4;
     draw_sprite_ext(spr_cursor, cursor_position, draw_x - 13, draw_y + (12 * drawScale), 1, 1, 0, c_black, .5);
     draw_sprite(spr_cursor, cursor_position, draw_x - 18, draw_y + (7 * drawScale));  

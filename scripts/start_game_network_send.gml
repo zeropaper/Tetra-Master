@@ -1,7 +1,9 @@
-quickplay_generate_hand(blue_hand);
-show_debug_message("PRINTING GENNED HAND:")
-debug_print_hand(blue_hand);
+// From the server, sets up a network game.
 
+// Generates a hand.
+quickplay_generate_hand(blue_hand);
+
+// Resets game variables.
 BLUE_SCORE = 0;
 RED_SCORE = 0;
 TURN = NO_TURN;
@@ -47,7 +49,7 @@ if (obj_network.connect_status == connstatus.host) {
             break;
     }
     
-    // Send the first turn and the seed.
+    // Send the first turn and the seed.    
     obj_game.seed = irandom(INT_MAX_32S);
     
     var buffer = buffer_create(16, buffer_grow, 1);

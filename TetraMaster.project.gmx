@@ -131,7 +131,6 @@
     <scripts name="drawing">
       <script>scripts\get_attack_type.gml</script>
       <script>scripts\draw_score.gml</script>
-      <script>scripts\draw_setup.gml</script>
       <script>scripts\draw_arrows.gml</script>
       <script>scripts\draw_card.gml</script>
       <script>scripts\draw_combo_woosh.gml</script>
@@ -145,6 +144,7 @@
       <script>scripts\str_chat_get.gml</script>
       <script>scripts\net_panic.gml</script>
     </scripts>
+    <script>scripts\play_sfx.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\font_text</font>

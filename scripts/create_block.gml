@@ -1,3 +1,5 @@
+// Creates a block on the game grid if it isn't already created.
+
 for (var i = 0; i < 4; i++) {
     for (var j = 0; j < 4; j++) {
         if (game_grid[i, j] == 10 && !collision_point(93 + 43 * i, 33 + 52 * j, obj_stone, true, true)) {

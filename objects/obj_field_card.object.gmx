@@ -71,11 +71,9 @@ pos_offset = 0;
 ending = 1;
 obj_ending.card_selected = id;
 if (obj_ending.game_ending &lt;= BLUE_WIN) {
-    audio_stop_sound(snd_win_card);
-    audio_play_sound(snd_win_card, 0, false);
+    play_sfx(snd_win_card);
 } else {
-    audio_stop_sound(snd_lose_card);
-    audio_play_sound(snd_lose_card, 0, false);            
+    play_sfx(snd_lose_card);         
 }
 </string>
           </argument>
@@ -146,10 +144,8 @@ alarm[7] = 30;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>audio_stop_sound(snd_flip_card);
-audio_play_sound(snd_flip_card, 0, false);
-audio_stop_sound(snd_combo_woosh);
-audio_play_sound(snd_combo_woosh, 0, false);
+            <string>play_sfx(snd_flip_card);
+play_sfx(snd_combo_woosh);
 update_scores();
 obj_game.alarm[1] = 1;
 </string>
@@ -400,8 +396,7 @@ if (ending &amp;&amp; !owned_by_red(identity) &amp;&amp; new_x &lt; 50) {
         draw_card(x + 7, y, card_info[0], card_info[1], card_info[2], card_info[3], card_info[4], card_info[5], false, owned_by_red(identity));
         if (ending_selected == false) {
             ending_selected = true;
-            audio_stop_sound(snd_cursor);
-            audio_play_sound(snd_cursor, 0, false);
+            play_sfx(snd_cursor);
         }
         draw_sprite_ext(spr_cursor, image_index / 4, x + sprite_width + 28, y + 13, -1, 1, 0, c_black, .5);
         draw_sprite_ext(spr_cursor, image_index / 4, x + sprite_width + 25, y + 10, -1, 1, 0, c_white, 1);
